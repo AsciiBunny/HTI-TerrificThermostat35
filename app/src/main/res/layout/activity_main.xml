@@ -61,12 +61,17 @@
 
 </android.support.constraint.ConstraintLayout>
 
-<Button
-    android:id="@+id/preset"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Current week program: Something"
-    android:layout_alignParentBottom="true"
-    />
 
-    </RelativeLayout>
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        app:itemBackground="@color/colorPrimary"
+        app:itemIconTint="@drawable/nav_item"
+        app:itemTextColor="@drawable/nav_item"
+        app:menu="@menu/bottom_nav_item"/>
+
+
+</RelativeLayout>

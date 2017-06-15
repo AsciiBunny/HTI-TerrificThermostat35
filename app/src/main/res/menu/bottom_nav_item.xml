@@ -5,8 +5,23 @@
 
     <item
         android:id="@+id/action_overview"
-
         android:enabled="true"
+        android:icon="@drawable/ic_home"
+        android:title="Home"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_overview"
+        android:enabled="true"
+        android:icon="@drawable/ic_weekprog"
+        android:title="Week Program"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_overview"
+        android:enabled="true"
+        android:icon="@drawable/ic_settings"
+        android:title="Settings"
         app:showAsAction="ifRoom"/>
 
 </menu>
