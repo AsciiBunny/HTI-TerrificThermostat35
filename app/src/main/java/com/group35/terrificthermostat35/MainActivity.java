@@ -1,5 +1,6 @@
 package com.group35.terrificthermostat35;
 
+import android.content.Intent;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         minus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                vtemp--;
+                /*vtemp--;
                 cTemp.setText(vtemp + " \u2103");
                 sTemp.setText(vtemp + " \u2103");
                 new CountDownTimer(1000, 1000) {
@@ -67,7 +68,9 @@ public class MainActivity extends AppCompatActivity {
                     public void onFinish() {
                         cTemp.setText(cTempHold + " \u2103");
                     }
-                }.start();
+                }.start();*/
+
+                startActivity(new Intent(MainActivity.this, WeekProgramActivity.class));
 
             }
         });
