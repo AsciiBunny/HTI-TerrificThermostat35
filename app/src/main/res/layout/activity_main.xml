@@ -12,7 +12,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.group35.terrificthermostat35.MainActivity">
+    tools:context="com.group35.terrificthermostat35.MainActivity"
+    android:background="@color/colorPrimary">
 
 
     <TextView
@@ -68,7 +69,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_alignParentBottom="true"
-        app:itemBackground="@color/colorPrimary"
+        app:itemBackground="@color/colorPrimaryLight"
         app:itemIconTint="@drawable/nav_item"
         app:itemTextColor="@drawable/nav_item"
         app:menu="@menu/bottom_nav_item"/>
