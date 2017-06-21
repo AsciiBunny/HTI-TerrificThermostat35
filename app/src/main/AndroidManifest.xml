@@ -28,6 +28,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.group35.terrificthermostat35.MainActivity" />
         </activity>
+
+        <activity
+            android:name=".ProgramList"
+            android:label="ProgramList"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.group35.terrificthermostat35.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

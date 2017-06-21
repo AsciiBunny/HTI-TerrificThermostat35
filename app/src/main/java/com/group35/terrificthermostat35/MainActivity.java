@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                vtemp++;
+                /*vtemp++;
                 cTempHold = 11;
                 cTemp.setText(vtemp + " \u2103");
                 sTemp.setText(vtemp + " \u2103");
@@ -49,9 +49,9 @@ public class MainActivity extends AppCompatActivity {
                     public void onFinish() {
                             cTemp.setText(cTempHold + " \u2103");
                     }
-                }.start();
+                }.start();*/
 
-
+                startActivity(new Intent(MainActivity.this, ProgramList.class));
 
             }
         });
