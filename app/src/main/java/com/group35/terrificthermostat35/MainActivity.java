@@ -18,8 +18,28 @@ public class MainActivity extends AppCompatActivity {
     int cTempHold;
     TextView cTemp;
     TextView sTemp;
-    private BottomNavigationView mBottomNav;
+    //private BottomNavigationView mBottomNav;
 
+	public BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.nav_main:
+                    startActivity(new Intent(MainActivity.this, MainActivity.class));
+                    return true;
+                case R.id.nav_weekprog:
+                    startActivity(new Intent(MainActivity.this, ProgramList.class));
+                    return true;
+                case R.id.nav_settings:
+                    startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                    return true;
+            }
+            return false;
+        }
+
+    };
 
     public static final String EXTRA_MESSAGE = "com.example.s157888.terrificthermostat35.MESSAGE";
 
@@ -34,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
         Button plus = (Button) findViewById(R.id.plus);
         Button minus = (Button) findViewById(R.id.minus);
 
+		BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         plus.setOnClickListener(new View.OnClickListener() {
             @Override

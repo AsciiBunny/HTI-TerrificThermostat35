@@ -20,12 +20,35 @@ import android.widget.TextView;
 public class ProgramList extends AppCompatActivity{
     //ExpandableRelativeLayout expandableLayout1;
 
+	public BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.nav_main:
+                    startActivity(new Intent(MainActivity.this, MainActivity.class));
+                    return true;
+                case R.id.nav_weekprog:
+                    startActivity(new Intent(MainActivity.this, ProgramList.class));
+                    return true;
+                case R.id.nav_settings:
+                    startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                    return true;
+            }
+            return false;
+        }
+
+    };
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.program_list);
 
-
+		BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+		
     final ConstraintLayout mainLayout = (ConstraintLayout)findViewById(R.id.program_list);
 
     /*View view = getLayoutInflater().inflate(R.layout.fragment_program_list, mainLayout,false);
