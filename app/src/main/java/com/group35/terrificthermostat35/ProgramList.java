@@ -5,12 +5,16 @@ package com.group35.terrificthermostat35;
  */
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -20,20 +24,20 @@ import android.widget.TextView;
 public class ProgramList extends AppCompatActivity{
     //ExpandableRelativeLayout expandableLayout1;
 
-	public BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+    public BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.nav_main:
-                    startActivity(new Intent(MainActivity.this, MainActivity.class));
+                    startActivity(new Intent(ProgramList.this, MainActivity.class));
                     return true;
                 case R.id.nav_weekprog:
-                    startActivity(new Intent(MainActivity.this, ProgramList.class));
+                    startActivity(new Intent(ProgramList.this, ProgramList.class));
                     return true;
                 case R.id.nav_settings:
-                    startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                    startActivity(new Intent(ProgramList.this, SettingsActivity.class));
                     return true;
             }
             return false;
