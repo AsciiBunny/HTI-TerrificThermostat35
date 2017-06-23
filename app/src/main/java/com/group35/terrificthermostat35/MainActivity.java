@@ -8,12 +8,13 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.support.design.widget.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    int vtemp = 21;
+    double vtemp = 21.0;
     TextView cTemp;
     TextView sTemp;
     //private BottomNavigationView mBottomNav;
@@ -49,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
 
         cTemp = (TextView) findViewById(R.id.cTemp);
         sTemp = (TextView) findViewById(R.id.sTemp);
-        Button plus = (Button) findViewById(R.id.plus);
-        Button minus = (Button) findViewById(R.id.minus);
+        ImageButton plus = (ImageButton) findViewById(R.id.plus);
+        ImageButton minus = (ImageButton) findViewById(R.id.minus);
 
 		BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -58,16 +59,16 @@ public class MainActivity extends AppCompatActivity {
         plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                vtemp++;
-                sTemp.setText(vtemp + " \u2103");
+                vtemp+= 0.1;
+                sTemp.setText(String.format ("%.1f", vtemp) +" \u2103");
 
             }
         });
         minus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                vtemp--;
-                sTemp.setText(vtemp + " \u2103");
+                vtemp-=0.1;
+                sTemp.setText(String.format ("%.1f", vtemp) +" \u2103");
 
             }
         });
