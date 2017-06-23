@@ -4,11 +4,13 @@ package com.group35.terrificthermostat35;
  * Created by s163390 on 21-6-2017.
  */
 
+import android.app.LauncherActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
@@ -16,13 +18,23 @@ import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
+import static android.R.id.list;
+
 public class ProgramList extends AppCompatActivity{
-    //ExpandableRelativeLayout expandableLayout1;
+    ListView myList;
+    ArrayList<ListItem> ProgramList;
+    MyAdapter myAdapter;
+
 
     public BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -50,37 +62,27 @@ public class ProgramList extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.program_list);
 
-		BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-		
-    final ConstraintLayout mainLayout = (ConstraintLayout)findViewById(R.id.program_list);
 
-    /*View view = getLayoutInflater().inflate(R.layout.fragment_program_list, mainLayout,false);
+        ProgramList=new ArrayList<>();
 
-    mainLayout.addView(view);*/
+        myAdapter=new MyAdapter(this,R.layout.simple_program_item, ProgramList);
+        myList=(ListView) findViewById(R.id.listView);
+        myList.setAdapter(myAdapter);
 
-    final LinearLayout ll = (LinearLayout) findViewById(R.id.program_list1);
+        ProgramList.add(new ListItem("Current program","Example Program"));
 
+        FloatingActionButton b = (FloatingActionButton) findViewById(R.id.floatingActionButton);
 
-    Button b=(Button) findViewById(R.id.button);
-    b.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            /*Context c=getApplicationContext();
-            TextView tvv=new TextView(c);
-            tvv.setText("textview");
-            ll.addView(tvv);*/
-            View view = getLayoutInflater().inflate(R.layout.fragment_program_list, ll,false);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                ProgramList.add(new ListItem("", "Something"));
+                myAdapter.notifyDataSetChanged();
+            }
 
-            ll.addView(view);
-        }
-    });
+        });
+
     }
-
-    /*public void expandableButton1(View view) {
-        expandableLayout1 = (ExpandableRelativeLayout) findViewById(R.id.expandableLayout1);
-        expandableLayout1.toggle(); // toggle expand and collapse
-    }*/
-
-
 }
