@@ -10,12 +10,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.support.design.widget.BottomNavigationView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     int vtemp = 21;
-    int cTempHold;
     TextView cTemp;
     TextView sTemp;
     //private BottomNavigationView mBottomNav;
@@ -30,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(MainActivity.this, MainActivity.class));
                     return true;
                 case R.id.nav_weekprog:
-                    startActivity(new Intent(MainActivity.this, ProgramList.class));
+                    startActivity(new Intent(MainActivity.this, ProgramListActivity.class));
                     return true;
                 case R.id.nav_settings:
                     startActivity(new Intent(MainActivity.this, SettingsActivity.class));
@@ -60,39 +58,16 @@ public class MainActivity extends AppCompatActivity {
         plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*vtemp++;
-                cTempHold = 11;
-                cTemp.setText(vtemp + " \u2103");
+                vtemp++;
                 sTemp.setText(vtemp + " \u2103");
-                new CountDownTimer(1000, 1000) {
-                    public void onTick(long milisUntilFinished){
-
-                    }
-                    public void onFinish() {
-                            cTemp.setText(cTempHold + " \u2103");
-                    }
-                }.start();*/
-
-                startActivity(new Intent(MainActivity.this, ProgramList.class));
 
             }
         });
         minus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*vtemp--;
-                cTemp.setText(vtemp + " \u2103");
+                vtemp--;
                 sTemp.setText(vtemp + " \u2103");
-                new CountDownTimer(1000, 1000) {
-                    public void onTick(long milisUntilFinished){
-
-                    }
-                    public void onFinish() {
-                        cTemp.setText(cTempHold + " \u2103");
-                    }
-                }.start();*/
-
-                startActivity(new Intent(MainActivity.this, WeekProgramActivity.class));
 
             }
         });

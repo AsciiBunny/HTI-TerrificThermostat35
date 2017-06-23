@@ -5,64 +5,100 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.group35.terrificthermostat35.MainActivity">
-
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     tools:context="com.group35.terrificthermostat35.MainActivity"
     android:background="@color/colorPrimary">
 
+ <android.support.constraint.ConstraintLayout
+     android:layout_width="match_parent"
+     android:layout_height="match_parent">
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:text="Current Temperature"
+    android:textSize="20dp"
+    android:textColor="@color/textColor"
+    app:layout_constraintTop_toTopOf="parent"
+    android:layout_marginTop="53dp"
+    android:layout_marginRight="8dp"
+    app:layout_constraintRight_toRightOf="parent"
+    android:layout_marginLeft="8dp"
+    app:layout_constraintLeft_toLeftOf="parent"
+    android:id="@+id/textView2" />
 
     <TextView
         android:id="@+id/cTemp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="21 &#x2103;"
+        android:text="21.0 &#x2103;"
         android:textSize="30dp"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:textColor="@color/textColor"
+        android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
-    <Button
-        android:id="@+id/plus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+"
-        android:textSize="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/cTemp"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginBottom="12dp" />
+        android:layout_marginTop="22dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <Button
         android:id="@+id/minus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="-"
-        android:textSize="30dp"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:textSize="20dp"
+        android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sTemp"
-        android:layout_marginTop="12dp" />
+        app:layout_constraintLeft_toRightOf="@+id/sTemp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/plus" />
+
+     <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:gravity="center"
+         android:text="Set Temperature"
+         android:textSize="20dp"
+         android:textColor="@color/textColor"
+         android:layout_marginRight="8dp"
+         app:layout_constraintRight_toRightOf="parent"
+         android:layout_marginLeft="8dp"
+         app:layout_constraintLeft_toLeftOf="parent"
+         android:layout_marginTop="93dp"
+         app:layout_constraintTop_toBottomOf="@+id/cTemp"
+         android:id="@+id/textView3" />
 
     <TextView
         android:id="@+id/sTemp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="21 &#x2103;"
+        android:text="21.0 &#x2103;"
+        android:textSize="30dp"
+        android:textColor="@color/textColor"
+        android:layout_marginTop="28dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <Button
+        android:id="@+id/plus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+"
+        android:textSize="20dp"
+        tools:layout_editor_absoluteY="251dp"
+        android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cTemp"
-        android:layout_marginTop="12dp" />
+        app:layout_constraintLeft_toRightOf="@+id/sTemp"
+        android:layout_marginLeft="8dp" />
+
+
 
 
 </android.support.constraint.ConstraintLayout>
-
-
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation"

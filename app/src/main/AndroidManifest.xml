@@ -30,7 +30,7 @@
         </activity>
 
         <activity
-            android:name=".ProgramList"
+            android:name=".ProgramListActivity"
             android:label="ProgramList"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">

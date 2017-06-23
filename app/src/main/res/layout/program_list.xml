@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.group35.terrificthermostat35.ProgramList"
+    tools:context="com.group35.terrificthermostat35.ProgramListActivity"
     android:background="@color/colorPrimary">
 
 

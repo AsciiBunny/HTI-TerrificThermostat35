@@ -19,7 +19,7 @@ public class SettingsActivity extends AppCompatActivity {
                     startActivity(new Intent(SettingsActivity.this, MainActivity.class));
                     return true;
                 case R.id.nav_weekprog:
-                    startActivity(new Intent(SettingsActivity.this, ProgramList.class));
+                    startActivity(new Intent(SettingsActivity.this, ProgramListActivity.class));
                     return true;
                 case R.id.nav_settings:
                     startActivity(new Intent(SettingsActivity.this, SettingsActivity.class));
