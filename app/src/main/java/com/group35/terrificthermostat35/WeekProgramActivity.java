@@ -19,7 +19,9 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
-public class WeekProgramActivity extends AppCompatActivity {
+import com.projectapi.thermometerapi.ThermostatData;
+
+public class WeekProgramActivity extends BasicActivity {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -55,6 +57,11 @@ public class WeekProgramActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+    }
+
+    @Override
+    public void onFinish(ThermostatData thermostatData) {
+
     }
 
 

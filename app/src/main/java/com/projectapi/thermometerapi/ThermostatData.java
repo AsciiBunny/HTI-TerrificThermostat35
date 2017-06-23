@@ -21,8 +21,7 @@ public class ThermostatData {
     protected Map<WeekDay, Boolean> weekDayDirtySwitchMap = new HashMap<>();
     protected boolean isTimeDirty;
 
-    public ThermostatData(WeekDay weekDay, String time, double currentTemperature, double targetTemperature
-            , double dayTemperature, double nightTemperature, boolean weekProgramState, Map<WeekDay, Switch[]> weekDaySwitchMap) {
+    public ThermostatData() {
         weekDayDirtySwitchMap.put(WeekDay.MONDAY, false);
         weekDayDirtySwitchMap.put(WeekDay.TUESDAY, false);
         weekDayDirtySwitchMap.put(WeekDay.WEDNESDAY, false);
@@ -30,16 +29,7 @@ public class ThermostatData {
         weekDayDirtySwitchMap.put(WeekDay.FRIDAY, false);
         weekDayDirtySwitchMap.put(WeekDay.SATURDAY, false);
         weekDayDirtySwitchMap.put(WeekDay.SUNDAY, false);
-
-        this.weekDay = weekDay;
-        this.time = time;
-        this.currentTemperature = currentTemperature;
-        this.targetTemperature = targetTemperature;
-        this.weekProgram = new WeekProgram();
-        this.weekProgram.dayTemperature = dayTemperature;
-        this.weekProgram.nightTemperature = nightTemperature;
-        this.weekProgram.weekDaySwitchMap = weekDaySwitchMap;
-        this.weekProgramState = weekProgramState;
+        weekProgram = new WeekProgram();
     }
 
     public WeekDay getWeekDay() {

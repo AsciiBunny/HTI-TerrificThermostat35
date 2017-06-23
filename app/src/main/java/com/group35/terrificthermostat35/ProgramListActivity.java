@@ -15,9 +15,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
+import com.projectapi.thermometerapi.ThermostatData;
+
 import java.util.ArrayList;
 
-public class ProgramListActivity extends AppCompatActivity{
+public class ProgramListActivity extends BasicActivity{
     ListView myList;
     ArrayList<ListItem> ProgramList;
     MyAdapter myAdapter;
@@ -71,6 +73,11 @@ public class ProgramListActivity extends AppCompatActivity{
             }
 
         });
+
+    }
+
+    @Override
+    public void onFinish(ThermostatData thermostatData) {
 
     }
 }

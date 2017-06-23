@@ -32,7 +32,7 @@ public class ThermostatClient {
     protected static final int NR_SWITCHES_WEEK = 10;
     protected static final DecimalFormat TEMP_FORMAT = new DecimalFormat("##.0");
 
-    private static ThermostatData thermostatData;
+    private static ThermostatData thermostatData = new ThermostatData();
 
     public static void init(int groupNumber, ThermostatDataHandler thermostatDataHandler) {
         GROUP_NUMBER = groupNumber + "";
@@ -45,10 +45,6 @@ public class ThermostatClient {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    if (thermostatDataHandler != null) {
-                        thermostatDataHandler.onStart(null);
-                    }
-
                     URL url = getURL("");
                     URLConnection conn = url.openConnection();
 
@@ -56,17 +52,14 @@ public class ThermostatClient {
                     DocumentBuilder builder = factory.newDocumentBuilder();
                     Document doc = builder.parse(conn.getInputStream());
 
-                    WeekDay weekDay = getWeekdayFromDoc(doc);
-                    String time = getTimeFromDoc(doc);
-                    double currentTemperature = getCurrentTemperatureFromDoc(doc);
-                    double targetTemperature = getTargetTemperatureFromDoc(doc);
-                    double dayTemperature = getDayTemperatureFromDoc(doc);
-                    double nightTemperature = getNightTemperatureFromDoc(doc);
-                    boolean weekProgramState = getWeekStateProgramFromDoc(doc);
-                    Map<WeekDay, Switch[]> weekDaySwitchMap = getWeekDaySwitches(doc);
-
-                    thermostatData = new ThermostatData(weekDay, time, currentTemperature, targetTemperature,
-                            dayTemperature, nightTemperature, weekProgramState, weekDaySwitchMap);
+                    thermostatData.weekDay = getWeekdayFromDoc(doc);
+                    thermostatData.time = getTimeFromDoc(doc);
+                    thermostatData.currentTemperature = getCurrentTemperatureFromDoc(doc);
+                    thermostatData.targetTemperature = getTargetTemperatureFromDoc(doc);
+                    thermostatData.weekProgram.dayTemperature = getDayTemperatureFromDoc(doc);
+                    thermostatData.weekProgram.nightTemperature = getNightTemperatureFromDoc(doc);
+                    thermostatData.weekProgramState = getWeekStateProgramFromDoc(doc);
+                    thermostatData.weekProgram.weekDaySwitchMap = getWeekDaySwitches(doc);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -240,39 +233,8 @@ public class ThermostatClient {
         putURL(getURL("weekProgramState"), XMLContent);
     }
 
-//    private static void putWeekProgram() {
-//
-//    }
-
     private static String createXMLWithOneTag(String tagName, String value) {
         return "<" + tagName + ">" + value + "</" + tagName + ">";
-    }
-
-    private static void loadWeekDayFromServer(final ThermostatData thermostatData) {
-        readURL(getURL("day"), new DataHandler() {
-            @Override
-            public void handle(Document doc) {
-                thermostatData.weekDay = WeekDay.parseWeekDay(doc.getDocumentElement().getTextContent());
-            }
-        });
-    }
-
-    private static void loadTimeFromServer(final ThermostatData thermostatData) {
-        readURL(getURL("time"), new DataHandler() {
-            @Override
-            public void handle(Document doc) {
-                thermostatData.time = doc.getDocumentElement().getTextContent();
-            }
-        });
-    }
-
-    private static void loadCurrentTempFromServer(final ThermostatData thermostatData) {
-        readURL(getURL("currentTemperature"), new DataHandler() {
-            @Override
-            public void handle(Document doc) {
-                thermostatData.currentTemperature = Double.parseDouble(doc.getDocumentElement().getTextContent());
-            }
-        });
     }
 
     private static void checkInitialized() {
@@ -293,10 +255,6 @@ public class ThermostatClient {
             @Override
             protected Void doInBackground(Void... params) {
 
-                if (handler != null) {
-                    handler.onStart(thermostatData);
-                }
-
                 if (thermostatData == null) {
                     return null;
                 }
@@ -304,24 +262,16 @@ public class ThermostatClient {
                 if (thermostatData.isWeekDayDirty) {
                     putWeekDay();
                     thermostatData.isWeekDayDirty = false;
-                } else {
-                    loadWeekDayFromServer(thermostatData);
-                    // else get the updated weekday from the server
                 }
 
                 if (thermostatData.isTimeDirty) {
                     putTime();
                     thermostatData.isTimeDirty = false;
-                } else {
-                    loadTimeFromServer(thermostatData);
-                    // else get the updated time from the server
                 }
 
                 if (thermostatData.isCurrentTemperatureDirty) {
                     putCurrentTemperature();
                     thermostatData.isCurrentTemperatureDirty = false;
-                } else {
-                    loadCurrentTempFromServer(thermostatData);
                 }
 
                 if (thermostatData.isTargetTemperatureDirty) {
@@ -350,9 +300,14 @@ public class ThermostatClient {
 //                    }
 //                }
 
-                if (handler != null) {
-                    handler.onFinish(thermostatData);
-                }
+                loadDataFromServer(new ThermostatDataHandler() {
+                    @Override
+                    public void onFinish(ThermostatData thermostatData) {
+                        if (handler != null) {
+                            handler.onFinish(thermostatData);
+                        }
+                    }
+                });
 
                 return null;
             }

@@ -18,15 +18,12 @@ import com.projectapi.thermometerapi.ThermostatClient;
 import com.projectapi.thermometerapi.ThermostatData;
 import com.projectapi.thermometerapi.ThermostatDataHandler;
 
-public class MainActivity extends AppCompatActivity {
-
-    protected TerrificApplication app;
+public class MainActivity extends BasicActivity {
 
     double vtemp = 21.0;
     TextView cTemp;
     TextView sTemp;
 
-    ThermostatData data;
     //private BottomNavigationView mBottomNav;
 
     public BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -56,11 +53,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        app = (TerrificApplication) getApplication();
-        app.setCurrentActivity(this, new MainActivityDataHandler());
-        if (app.getThermostatData() != null)
-            data = app.getThermostatData();
 
         // Setup Bottom Navigation
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
@@ -94,18 +86,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private class MainActivityDataHandler extends ThermostatDataHandler {
-        @Override
-        protected void onFinish(ThermostatData thermostatData) {
-            super.onFinish(thermostatData);
-
-            if (thermostatData != null) {
-                data = thermostatData;
-                cTemp.post(new TextViewUpdate(cTemp, ThermostatClient.parseTempToString(thermostatData.getCurrentTemperature()) + " \u2103"));
-                sTemp.post(new TextViewUpdate(sTemp, ThermostatClient.parseTempToString(thermostatData.getTargetTemperature()) + " \u2103"));
-            } else {
-                Log.e("MainActivityDataHandler", "ThermostatData is null");
-            }
+    @Override
+    public void onFinish(ThermostatData thermostatData) {
+        if (thermostatData != null) {
+            data = thermostatData;
+            cTemp.post(new TextViewUpdate(cTemp, ThermostatClient.parseTempToString(thermostatData.getCurrentTemperature()) + " \u2103"));
+            sTemp.post(new TextViewUpdate(sTemp, ThermostatClient.parseTempToString(thermostatData.getTargetTemperature()) + " \u2103"));
+        } else {
+            Log.e("MainActivityDataHandler", "ThermostatData is null");
         }
     }
 
