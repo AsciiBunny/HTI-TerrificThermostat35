@@ -3,7 +3,6 @@ package com.group35.terrificthermostat35;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Handler;
-import android.util.Log;
 
 import com.projectapi.thermometerapi.ThermostatClient;
 import com.projectapi.thermometerapi.ThermostatData;
@@ -51,8 +50,21 @@ public class TerrificApplication extends Application {
 
         @Override
         public void run() {
-            ThermostatClient.updateThermometerData(currentActivity);
+            ThermostatClient.updateThermometerData(new BasicActivityThermostatDataHandler());
             timerHandler.postDelayed(new ThermostatClientPusher(), THERMOSTAT_CLIENT_UPDATE_TIME);
+        }
+    }
+
+    private class BasicActivityThermostatDataHandler implements ThermostatDataHandler {
+
+        @Override
+        public void onFinish(final ThermostatData thermostatData) {
+            currentActivity.runOnUiThread(new Runnable(){
+                @Override
+                public void run() {
+                    currentActivity.onThermostatDataUpdate(thermostatData);
+                }
+            });
         }
     }
 }

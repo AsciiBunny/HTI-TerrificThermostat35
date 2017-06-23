@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.projectapi.thermometerapi.ThermostatData;
+import com.projectapi.thermometerapi.WeekProgram;
 
 import java.util.ArrayList;
 
@@ -69,7 +70,10 @@ public class ProgramListActivity extends BasicActivity{
             public void onClick(View arg0) {
                 ProgramList.add(new ListItem("", "Something"));
                 myAdapter.notifyDataSetChanged();
-                startActivity(new Intent(ProgramListActivity.this, WeekProgramActivity.class));
+
+                Intent intent = new Intent(ProgramListActivity.this, WeekProgramActivity.class);
+                intent.putExtra(WeekProgramActivity.WEEKPROGRAM_NAME_MESSAGE, WeekProgram.DEFAULT_NAME);
+                startActivity(intent);
             }
 
         });
@@ -77,7 +81,7 @@ public class ProgramListActivity extends BasicActivity{
     }
 
     @Override
-    public void onFinish(ThermostatData thermostatData) {
+    public void onThermostatDataUpdate(ThermostatData thermostatData) {
 
     }
 }

@@ -42,7 +42,7 @@ public class SettingsActivity extends BasicActivity {
     }
 
     @Override
-    public void onFinish(ThermostatData thermostatData) {
+    public void onThermostatDataUpdate(ThermostatData thermostatData) {
 
     }
 }

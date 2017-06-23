@@ -1,5 +1,6 @@
 package com.group35.terrificthermostat35;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -23,6 +24,7 @@ import com.projectapi.thermometerapi.ThermostatData;
 
 public class WeekProgramActivity extends BasicActivity {
 
+    public static final String WEEKPROGRAM_NAME_MESSAGE = "com.group35.terrificthermostat35.weekProgramNameMessage";
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -43,10 +45,17 @@ public class WeekProgramActivity extends BasicActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_week_program);
 
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        // Create the adapter that will return a fragment for each of the three
+
+        // Get weekProgram name from intent and set it as title
+        Intent intent = getIntent();
+        String name = intent.getStringExtra(WEEKPROGRAM_NAME_MESSAGE);
+        getSupportActionBar().setTitle(name);
+
+        // Create the adapter that will return a fragment for each of the seven
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -60,7 +69,7 @@ public class WeekProgramActivity extends BasicActivity {
     }
 
     @Override
-    public void onFinish(ThermostatData thermostatData) {
+    public void onThermostatDataUpdate(ThermostatData thermostatData) {
 
     }
 
@@ -80,7 +89,9 @@ public class WeekProgramActivity extends BasicActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_done) {
+            Snackbar.make(findViewById(R.id.main_content), "Test", 2000).show();
+            startActivity(new Intent(WeekProgramActivity.this, ProgramListActivity.class));
             return true;
         }
 

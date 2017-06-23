@@ -47,8 +47,6 @@ public class MainActivity extends BasicActivity {
 
     };
 
-    public static final String EXTRA_MESSAGE = "com.group35.terrificthermostat35.MESSAGE";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,29 +85,13 @@ public class MainActivity extends BasicActivity {
     }
 
     @Override
-    public void onFinish(ThermostatData thermostatData) {
+    public void onThermostatDataUpdate(ThermostatData thermostatData) {
         if (thermostatData != null) {
             data = thermostatData;
-            cTemp.post(new TextViewUpdate(cTemp, ThermostatClient.parseTempToString(thermostatData.getCurrentTemperature()) + " \u2103"));
-            sTemp.post(new TextViewUpdate(sTemp, ThermostatClient.parseTempToString(thermostatData.getTargetTemperature()) + " \u2103"));
+            cTemp.setText(ThermostatClient.parseTempToString(thermostatData.getCurrentTemperature()) + " \u2103");
+            sTemp.setText(ThermostatClient.parseTempToString(thermostatData.getTargetTemperature()) + " \u2103");
         } else {
             Log.e("MainActivityDataHandler", "ThermostatData is null");
-        }
-    }
-
-    private class TextViewUpdate implements Runnable {
-
-        private TextView target;
-        private String string;
-
-        public TextViewUpdate(TextView target, String text) {
-            this.target = target;
-            this.string = text;
-        }
-
-        @Override
-        public void run() {
-            target.setText(string);
         }
     }
 }

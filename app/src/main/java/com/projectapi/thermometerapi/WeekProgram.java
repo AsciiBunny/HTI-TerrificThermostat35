@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class WeekProgram implements Serializable {
 
-    private static final String DEFAULT_NAME = "Thermostat Weekprogram";
+    public static final String DEFAULT_NAME = "Thermostat Weekprogram";
 
     public WeekProgram() {
         this.name = DEFAULT_NAME;

@@ -11,7 +11,7 @@ import com.projectapi.thermometerapi.ThermostatDataHandler;
  * Created by AsciiBunny on 23-6-2017.
  */
 
-public abstract class BasicActivity extends AppCompatActivity implements ThermostatDataHandler{
+public abstract class BasicActivity extends AppCompatActivity {
 
     protected TerrificApplication app;
     protected ThermostatData data;
@@ -51,6 +51,5 @@ public abstract class BasicActivity extends AppCompatActivity implements Thermos
             app.setCurrentActivity(null);
     }
 
-    @Override
-    public abstract void onFinish(ThermostatData thermostatData);
+    public abstract void onThermostatDataUpdate(ThermostatData thermostatData);
 }
