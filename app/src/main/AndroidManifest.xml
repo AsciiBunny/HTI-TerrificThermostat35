@@ -24,7 +24,7 @@
         <activity
             android:name=".WeekProgramActivity"
             android:label="@string/title_activity_week_program"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".ProgramListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -33,9 +33,8 @@
 
         <activity
             android:name=".ProgramListActivity"
-            android:label="ProgramList"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="ProgramListActivity"
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.group35.terrificthermostat35.MainActivity" />
