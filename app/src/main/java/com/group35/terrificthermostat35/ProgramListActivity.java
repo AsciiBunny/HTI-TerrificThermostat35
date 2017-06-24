@@ -13,7 +13,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.projectapi.thermometerapi.ThermostatData;
 import com.projectapi.thermometerapi.WeekProgram;
@@ -60,6 +62,18 @@ public class ProgramListActivity extends BasicActivity{
         myAdapter=new MyAdapter(this,R.layout.simple_program_item, ProgramList);
         myList=(ListView) findViewById(R.id.listView);
         myList.setAdapter(myAdapter);
+
+        ProgramList.add(new WeekProgram("Weekprogram"));
+
+        myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView parent, View view, int position,long id) {
+
+                        Intent intent = new Intent(ProgramListActivity.this, WeekProgramActivity.class);
+                        intent.putExtra(WeekProgramActivity.WEEKPROGRAM_NAME_MESSAGE, WeekProgram.DEFAULT_NAME);
+                        startActivity(intent);
+                    }
+                });
 
 
         FloatingActionButton b = (FloatingActionButton) findViewById(R.id.floatingActionButton);
