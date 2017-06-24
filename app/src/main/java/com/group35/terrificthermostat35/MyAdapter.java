@@ -11,14 +11,15 @@ import android.widget.TextView;
 
 import com.group35.terrificthermostat35.ListItem;
 import com.group35.terrificthermostat35.R;
+import com.projectapi.thermometerapi.WeekProgram;
 
 import java.util.ArrayList;
 
-public class MyAdapter extends ArrayAdapter<ListItem> {
+public class MyAdapter extends ArrayAdapter<WeekProgram> {
 
-    ArrayList<ListItem> ProgramList = new ArrayList<>();
+    ArrayList<WeekProgram> ProgramList = new ArrayList<>();
 
-    public MyAdapter(Context context, int textViewResourceId, ArrayList<ListItem> objects) {
+    public MyAdapter(Context context, int textViewResourceId, ArrayList<WeekProgram> objects) {
         super(context, textViewResourceId, objects);
         ProgramList = objects;
     }
@@ -35,9 +36,7 @@ public class MyAdapter extends ArrayAdapter<ListItem> {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         v = inflater.inflate(R.layout.simple_program_item, null);
         TextView textView = (TextView) v.findViewById(R.id.textView);
-        textView.setText(ProgramList.get(position).getProgramName());
-        TextView textView1 = (TextView) v.findViewById(R.id.textView1);
-        textView1.setText(ProgramList.get(position).getProgramName1());
+        textView.setText(ProgramList.get(position).getName());
         return v;
     }
 }

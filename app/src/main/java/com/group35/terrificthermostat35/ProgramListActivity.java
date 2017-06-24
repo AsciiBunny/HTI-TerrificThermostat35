@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public class ProgramListActivity extends BasicActivity{
     ListView myList;
-    ArrayList<ListItem> ProgramList;
+    ArrayList<WeekProgram> ProgramList;
     MyAdapter myAdapter;
 
 
@@ -61,14 +61,13 @@ public class ProgramListActivity extends BasicActivity{
         myList=(ListView) findViewById(R.id.listView);
         myList.setAdapter(myAdapter);
 
-        ProgramList.add(new ListItem("Current program","Example Program"));
 
         FloatingActionButton b = (FloatingActionButton) findViewById(R.id.floatingActionButton);
 
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                ProgramList.add(new ListItem("", "Something"));
+                ProgramList.add(new WeekProgram("Weekprogram"));
                 myAdapter.notifyDataSetChanged();
 
                 Intent intent = new Intent(ProgramListActivity.this, WeekProgramActivity.class);
@@ -82,6 +81,9 @@ public class ProgramListActivity extends BasicActivity{
 
     @Override
     public void onThermostatDataUpdate(ThermostatData thermostatData) {
-
+        if (thermostatData != null) {
+            data = thermostatData;
+            }
     }
+
 }

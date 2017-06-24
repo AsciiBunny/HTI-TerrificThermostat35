@@ -9,32 +9,32 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.group35.terrificthermostat35.WeekProgramActivity$PlaceholderFragment">
 
-    <TextView
-        android:id="@+id/section_label"
-        android:layout_width="293dp"
-        android:layout_height="20dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:textAlignment="center"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="-51dp" />
 
-    <SeekBar
-        android:id="@+id/seekBar"
-        android:layout_width="269dp"
-        android:layout_height="25dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/section_label"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        tools:layout_editor_absoluteY="267dp"
-        tools:layout_editor_absoluteX="-55dp" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/floatingActionButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            app:fabSize="mini"
+            app:srcCompat="@android:drawable/ic_menu_add"
+            android:layout_gravity="center_horizontal|center"
+            android:layout_weight="1"
+            android:layout_marginRight="25dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="25dp"
+            android:layout_marginEnd="47dp" />
+
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="225dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linearLayout"
+            android:layout_centerHorizontal="true"
+            tools:layout_editor_absoluteY="81dp"
+            tools:layout_editor_absoluteX="8dp">
+
+        </ListView>
+
 
 </android.support.constraint.ConstraintLayout>
