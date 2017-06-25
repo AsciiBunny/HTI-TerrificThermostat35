@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -28,10 +29,12 @@ import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ProgramListActivity extends BasicActivity{
-    ListView myList;
-    ArrayList<WeekProgram> ProgramList;
+    ExpandableListView myList;
+    ArrayList<WeekProgram> ProgramListHeader;
+    HashMap<WeekProgram, ArrayList<String>> ProgramListChild;
     MyAdapter myAdapter;
 
     public BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -64,17 +67,24 @@ public class ProgramListActivity extends BasicActivity{
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        ProgramList = new ArrayList<WeekProgram>();
+        ProgramListHeader = new ArrayList<WeekProgram>();
+        ProgramListChild = new HashMap<WeekProgram ,ArrayList<String>>();
 
-        myAdapter = new MyAdapter(this, R.layout.simple_program_item, ProgramList);
-        myList = (ListView) findViewById(R.id.listView);
+        myAdapter = new MyAdapter(this, ProgramListHeader, ProgramListChild);
+        myList = (ExpandableListView) findViewById(R.id.listView);
         myList.setAdapter(myAdapter);
 
         WeekProgram test =data.getCopyOfWeekProgram();
         test.setName("Week Program");
         data.setWeekProgram(test);
 
-        ProgramList.add(data.getCopyOfWeekProgram());
+        ProgramListHeader.add(data.getCopyOfWeekProgram());
+
+        ArrayList<String> testing = new ArrayList<String>();
+        testing.add("test");
+
+        ProgramListChild.put(ProgramListHeader.get(0), testing);
+
 
      /*try {
          FileInputStream fis = this.openFileInput("/thermostaat");
@@ -95,7 +105,7 @@ public class ProgramListActivity extends BasicActivity{
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                ProgramList.add(new WeekProgram("test"));
+                ProgramListHeader.add(new WeekProgram("test"));
                 myAdapter.notifyDataSetChanged();
 
                 /*try {
