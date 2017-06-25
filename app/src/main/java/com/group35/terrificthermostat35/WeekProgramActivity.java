@@ -1,5 +1,8 @@
 package com.group35.terrificthermostat35;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -18,11 +21,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.projectapi.thermometerapi.Switch;
 import com.projectapi.thermometerapi.ThermostatData;
+import com.projectapi.thermometerapi.WeekProgram;
+
+import java.util.ArrayList;
+
+import static android.R.attr.id;
+import static android.R.id.message;
 
 public class WeekProgramActivity extends BasicActivity {
+
+
 
     public static final String WEEKPROGRAM_NAME_MESSAGE = "com.group35.terrificthermostat35.weekProgramNameMessage";
     /**
@@ -106,6 +121,8 @@ public class WeekProgramActivity extends BasicActivity {
          * The fragment argument representing the section number for this
          * fragment.
          */
+
+        int type;
         private static final String ARG_SECTION_NUMBER = "section_number";
 
         public PlaceholderFragment() {
@@ -126,7 +143,49 @@ public class WeekProgramActivity extends BasicActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+
             View rootView = inflater.inflate(R.layout.fragment_week_program, container, false);
+
+            type=0;
+
+            FloatingActionButton b =(FloatingActionButton) rootView.findViewById(R.id.floatingActionButton);
+            final ArrayList<SwitchItem> SwitchList=new ArrayList<>();
+
+            final SwitchAdapter switchAdapter=new SwitchAdapter(getActivity(),R.layout.switch_list_item, SwitchList);
+            ListView myList=(ListView) rootView.findViewById(R.id.listView);
+            myList.setAdapter(switchAdapter);
+            
+
+            // creates popup to ask for time of switch
+            final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+            final EditText input = new EditText(getActivity());
+            alertDialog.setButton(Dialog.BUTTON_POSITIVE,"Add", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    type += 1; // to keep track of if it's a night or day switch
+                    if(type %2 == 1) {
+                        SwitchList.add(new SwitchItem(input.getText().toString(),R.drawable.ic_sun));
+                        switchAdapter.notifyDataSetChanged();
+                    } else {
+                        SwitchList.add(new SwitchItem(input.getText().toString(),R.drawable.ic_moon));
+                        switchAdapter.notifyDataSetChanged();
+                    }
+
+                    //should still add a switch time
+                }
+            });
+            alertDialog.setTitle("Set switch time");
+            alertDialog.setView(input);
+
+
+
+            b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    alertDialog.show();
+                }
+
+            });
 
             return rootView;
         }
