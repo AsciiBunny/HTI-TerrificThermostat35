@@ -4,6 +4,7 @@ package com.group35.terrificthermostat35;
  * Created by s163390 on 21-6-2017.
  */
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -20,13 +21,18 @@ import android.widget.TextView;
 import com.projectapi.thermometerapi.ThermostatData;
 import com.projectapi.thermometerapi.WeekProgram;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 public class ProgramListActivity extends BasicActivity{
     ListView myList;
     ArrayList<WeekProgram> ProgramList;
     MyAdapter myAdapter;
-
 
     public BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -48,7 +54,8 @@ public class ProgramListActivity extends BasicActivity{
         }
 
     };
-	
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,20 +64,46 @@ public class ProgramListActivity extends BasicActivity{
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        ProgramList=new ArrayList<>();
+        ProgramList = new ArrayList<WeekProgram>();
 
-        myAdapter=new MyAdapter(this,R.layout.simple_program_item, ProgramList);
-        myList=(ListView) findViewById(R.id.listView);
+        myAdapter = new MyAdapter(this, R.layout.simple_program_item, ProgramList);
+        myList = (ListView) findViewById(R.id.listView);
         myList.setAdapter(myAdapter);
 
+     /*try {
+         FileInputStream fis = this.openFileInput("/thermostaat");
+        ObjectInputStream is = new ObjectInputStream(fis);
+        ProgramList = (ArrayList<WeekProgram>) is.readObject();
+        is.close();
+        fis.close();
+    }
+            catch(Exception ex){
+            System.out.println (ex.toString());
+            System.out.println("Could not read file ");
+    }*/
+
+
+        ProgramList.add(new WeekProgram("Week Program"));
 
         FloatingActionButton b = (FloatingActionButton) findViewById(R.id.floatingActionButton);
 
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                ProgramList.add(new WeekProgram("Something"));
+                ProgramList.add(new WeekProgram("test"));
                 myAdapter.notifyDataSetChanged();
+
+                /*try {
+                    FileOutputStream fos = arg0.getContext().openFileOutput("/thermostaat", Context.MODE_PRIVATE);
+                    ObjectOutputStream os = new ObjectOutputStream(fos);
+                    os.writeObject(ProgramList);
+                    os.close();
+                    fos.close();
+                }
+                catch(Exception ex){
+                    System.out.println (ex.toString());
+                    System.out.println("Could not write file ");
+                }*/
 
                 Intent intent = new Intent(ProgramListActivity.this, WeekProgramActivity.class);
                 intent.putExtra(WeekProgramActivity.WEEKPROGRAM_NAME_MESSAGE, WeekProgram.DEFAULT_NAME);
