@@ -154,7 +154,7 @@ public class WeekProgramActivity extends BasicActivity {
             final SwitchAdapter switchAdapter=new SwitchAdapter(getActivity(),R.layout.switch_list_item, SwitchList);
             ListView myList=(ListView) rootView.findViewById(R.id.listView);
             myList.setAdapter(switchAdapter);
-            
+
 
             // creates popup to ask for time of switch
             final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();

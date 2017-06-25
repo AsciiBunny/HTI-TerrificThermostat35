@@ -1,21 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@color/colorPrimary"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     >
-
 
 
     <TextView
     android:text="TextView"
     android:textSize="25dp"
+        android:layout_gravity="center"
         android:textColor="@color/textColor"
-    android:gravity="center"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:id="@+id/textView"
     />
 
-</LinearLayout>
+    <Button
+        android:id="@+id/activeButton"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Set Active" />
+
+    <Button
+        android:id="@+id/editButton"
+        android:layout_toLeftOf="@+id/activeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit" />
+
+
+</RelativeLayout>
