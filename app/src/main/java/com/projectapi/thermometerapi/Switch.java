@@ -5,9 +5,9 @@ package com.projectapi.thermometerapi;
  */
 
 public class Switch {
-    private SwitchType type;
-    private boolean state;
-    private String time;
+    public SwitchType type;
+    public boolean state;
+    public String time;
 
     public Switch(SwitchType type, boolean state, String time) {
         this.type = type;

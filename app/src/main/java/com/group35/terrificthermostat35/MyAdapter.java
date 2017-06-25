@@ -41,7 +41,7 @@ public class MyAdapter extends ArrayAdapter<WeekProgram> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        final int pos= position;
+        final int pos = position;
         View v = convertView;
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         v = inflater.inflate(R.layout.simple_program_item, null);
@@ -50,19 +50,19 @@ public class MyAdapter extends ArrayAdapter<WeekProgram> {
 
         Button active = (Button) v.findViewById(R.id.activeButton);
         Button edit = (Button) v.findViewById(R.id.editButton);
-        active.setOnClickListener(new View.OnClickListener(){
+        active.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("CLICKED POSITION",Integer.valueOf(pos).toString());
-                View parent =(View) v.getParent();
-                parent.setBackgroundColor(ContextCompat.getColor(getContext(),R.color.colorPrimaryLight));
+                Log.d("CLICKED POSITION", Integer.valueOf(pos).toString());
+                View parent = (View) v.getParent();
+                parent.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryLight));
 
                 // Something that sets weekprogram to active???
 
             }
         });
 
-        edit.setOnClickListener(new View.OnClickListener(){
+        edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), WeekProgramActivity.class);
@@ -76,6 +76,10 @@ public class MyAdapter extends ArrayAdapter<WeekProgram> {
         return v;
     }
 
+
     }
+
+
+}
 
 

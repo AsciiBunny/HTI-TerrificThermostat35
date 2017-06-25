@@ -34,8 +34,19 @@ public class ThermostatClient {
 
     private static ThermostatData thermostatData = new ThermostatData();
 
+    private static DocumentBuilderFactory factory;
+    private static DocumentBuilder builder;
+
     public static void init(int groupNumber, ThermostatDataHandler thermostatDataHandler) {
         GROUP_NUMBER = groupNumber + "";
+
+        try {
+            factory = DocumentBuilderFactory.newInstance();
+            builder = factory.newDocumentBuilder();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         loadDataFromServer(thermostatDataHandler);
     }
 
@@ -48,18 +59,88 @@ public class ThermostatClient {
                     URL url = getURL("");
                     URLConnection conn = url.openConnection();
 
-                    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                    DocumentBuilder builder = factory.newDocumentBuilder();
                     Document doc = builder.parse(conn.getInputStream());
 
-                    thermostatData.weekDay = getWeekdayFromDoc(doc);
-                    thermostatData.time = getTimeFromDoc(doc);
-                    thermostatData.currentTemperature = getCurrentTemperatureFromDoc(doc);
-                    thermostatData.targetTemperature = getTargetTemperatureFromDoc(doc);
-                    thermostatData.weekProgram.dayTemperature = getDayTemperatureFromDoc(doc);
-                    thermostatData.weekProgram.nightTemperature = getNightTemperatureFromDoc(doc);
-                    thermostatData.weekProgramState = getWeekStateProgramFromDoc(doc);
-                    thermostatData.weekProgram.weekDaySwitchMap = getWeekDaySwitches(doc);
+                    WeekDay newWeekDay = getWeekdayFromDoc(doc);
+                    String newTime = getTimeFromDoc(doc);
+                    double newCurrentTemperature = getCurrentTemperatureFromDoc(doc);
+                    double newTargetTemperature = getTargetTemperatureFromDoc(doc);
+                    double newDayTemperature = getDayTemperatureFromDoc(doc);
+                    double newNightTemperature = getNightTemperatureFromDoc(doc);
+                    boolean newWeekProgramState = getWeekStateProgramFromDoc(doc);
+                    Map<WeekDay, Switch[]> newWeekDaySwitchMap = getWeekDaySwitches(doc);
+
+                    if (thermostatData.isWeekDayDirty) {
+                        if (newWeekDay == thermostatData.weekDay) {
+                            thermostatData.isWeekDayDirty = false;
+                            thermostatData.weekDay = newWeekDay;
+                        }
+                    } else {
+                        thermostatData.weekDay = newWeekDay;
+                    }
+
+                    if (thermostatData.isTimeDirty) {
+                        if (newTime.equals(thermostatData.time)) {
+                            thermostatData.isTimeDirty = false;
+                            thermostatData.time = newTime;
+                        }
+                    } else {
+                        thermostatData.time = newTime;
+                    }
+
+                    if (thermostatData.isCurrentTemperatureDirty) {
+                        if (isTempEqual(newCurrentTemperature, thermostatData.currentTemperature)) {
+                            thermostatData.isCurrentTemperatureDirty = false;
+                            thermostatData.currentTemperature = newCurrentTemperature;
+                        }
+                    } else {
+                        thermostatData.currentTemperature = newCurrentTemperature;
+                    }
+
+                    if (thermostatData.isTargetTemperatureDirty) {
+                        if (isTempEqual(newTargetTemperature, thermostatData.targetTemperature)) {
+                            thermostatData.isTargetTemperatureDirty = false;
+                            thermostatData.targetTemperature = newTargetTemperature;
+                        }
+                    } else {
+                        thermostatData.targetTemperature = newTargetTemperature;
+                    }
+
+                    if (thermostatData.isDayTemperatureDirty) {
+                        if (isTempEqual(newDayTemperature, thermostatData.weekProgram.dayTemperature)) {
+                            thermostatData.isDayTemperatureDirty = false;
+                            thermostatData.weekProgram.dayTemperature = newDayTemperature;
+                        }
+                    } else {
+                        thermostatData.weekProgram.dayTemperature = newDayTemperature;
+                    }
+
+                    if (thermostatData.isNightTemperatureDirty) {
+                        if (isTempEqual(newNightTemperature, thermostatData.weekProgram.nightTemperature)) {
+                            thermostatData.isNightTemperatureDirty = false;
+                            thermostatData.weekProgram.nightTemperature = newNightTemperature;
+                        }
+                    } else {
+                        thermostatData.weekProgram.nightTemperature = newNightTemperature;
+                    }
+
+                    if (thermostatData.isWeekProgramStateDirty) {
+                        if (thermostatData.isWeekProgramStateDirty == newWeekProgramState) {
+                            thermostatData.isWeekProgramStateDirty = false;
+                            thermostatData.weekProgramState = newWeekProgramState;
+                        }
+                    } else {
+                        thermostatData.weekProgramState = newWeekProgramState;
+                    }
+
+                    if (thermostatData.isWeekDaySwitchMapDirty) {
+                        if (newWeekDaySwitchMap.equals(thermostatData.weekProgram.weekDaySwitchMap)) {
+                            thermostatData.isWeekProgramStateDirty = false;
+                            thermostatData.weekProgram.weekDaySwitchMap = newWeekDaySwitchMap;
+                        }
+                    } else {
+                        thermostatData.weekProgram.weekDaySwitchMap = newWeekDaySwitchMap;
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -72,6 +153,10 @@ public class ThermostatClient {
                 return null;
             }
         }.execute();
+    }
+
+    private static boolean isTempEqual(double temp1, double temp2) {
+        return Math.abs(temp1 - temp2) < EPSILON;
     }
 
     private static WeekDay getWeekdayFromDoc(Document doc) {
@@ -117,7 +202,7 @@ public class ThermostatClient {
                 Element switchNode = (Element) weekDayProgramNode.getElementsByTagName("switch").item(j);
 
                 String time = switchNode.getTextContent();
-                SwitchType type = switchNode.getAttributes().getNamedItem("type").getNodeValue().equals("Day") ? SwitchType.DAY : SwitchType.NIGHT;
+                SwitchType type = switchNode.getAttributes().getNamedItem("type").getNodeValue().equals("day") ? SwitchType.DAY : SwitchType.NIGHT;
                 boolean state = switchNode.getAttributes().getNamedItem("state").getNodeValue().equals("on");
 
                 Switch theSwitch = new Switch(type, state, time);
@@ -233,6 +318,34 @@ public class ThermostatClient {
         putURL(getURL("weekProgramState"), XMLContent);
     }
 
+    private static void putWeekDaySwitchMap() {
+        Document doc = builder.newDocument();
+
+        Element rootElement = doc.createElement("week_program");
+        doc.appendChild(rootElement);
+
+        for (WeekDay weekDay : WeekDay.values()) {
+            Element weekdayElement = doc.createElement("day");
+            weekdayElement.setAttribute("day", weekDay.name);
+
+            for (Switch littleSwitch : thermostatData.weekProgram.weekDaySwitchMap.get(weekDay)) {
+                Element littleSwitchElement = doc.createElement("switch");
+
+                littleSwitchElement.setAttribute("type", littleSwitch.getSwitchType() == SwitchType.DAY ? "day" : "night");
+                littleSwitchElement.setAttribute("state", littleSwitch.getState() ? "on" : "off");
+                littleSwitchElement.setTextContent(littleSwitch.getTime());
+
+                weekdayElement.appendChild(littleSwitchElement);
+            }
+
+            rootElement.appendChild(weekdayElement);
+        }
+
+        String XMLContent = doc.getTextContent();
+        putURL(getURL("weekProgram"), XMLContent);
+
+    }
+
     private static String createXMLWithOneTag(String tagName, String value) {
         return "<" + tagName + ">" + value + "</" + tagName + ">";
     }
@@ -255,51 +368,6 @@ public class ThermostatClient {
             @Override
             protected Void doInBackground(Void... params) {
 
-                if (thermostatData == null) {
-                    return null;
-                }
-
-                if (thermostatData.isWeekDayDirty) {
-                    putWeekDay();
-                    thermostatData.isWeekDayDirty = false;
-                }
-
-                if (thermostatData.isTimeDirty) {
-                    putTime();
-                    thermostatData.isTimeDirty = false;
-                }
-
-                if (thermostatData.isCurrentTemperatureDirty) {
-                    putCurrentTemperature();
-                    thermostatData.isCurrentTemperatureDirty = false;
-                }
-
-                if (thermostatData.isTargetTemperatureDirty) {
-                    putTargetTemperature();
-                    thermostatData.isTargetTemperatureDirty = false;
-                }
-
-                if (thermostatData.isDayTemperatureDirty) {
-                    putDayTemperature();
-                    thermostatData.isDayTemperatureDirty = false;
-                }
-
-                if (thermostatData.isNightTemperatureDirty) {
-                    putNightTemperature();
-                    thermostatData.isNightTemperatureDirty = false;
-                }
-
-                if (thermostatData.isWeekProgramStateDirty) {
-                    putWeekProgramState();
-                    thermostatData.isWeekProgramStateDirty = false;
-                }
-
-//                for (Map.Entry<WeekDay, Boolean> entry : thermostatData.weekDayDirtySwitchMap.entrySet()) {
-//                    if (entry.getValue()) {
-//                        update
-//                    }
-//                }
-
                 loadDataFromServer(new ThermostatDataHandler() {
                     @Override
                     public void onFinish(ThermostatData thermostatData) {
@@ -308,6 +376,42 @@ public class ThermostatClient {
                         }
                     }
                 });
+
+                if (thermostatData == null) {
+                    return null;
+                }
+
+                if (thermostatData.isWeekDayDirty) {
+                    putWeekDay();
+                }
+
+                if (thermostatData.isTimeDirty) {
+                    putTime();
+                }
+
+                if (thermostatData.isCurrentTemperatureDirty) {
+                    putCurrentTemperature();
+                }
+
+                if (thermostatData.isTargetTemperatureDirty) {
+                    putTargetTemperature();
+                }
+
+                if (thermostatData.isDayTemperatureDirty) {
+                    putDayTemperature();
+                }
+
+                if (thermostatData.isNightTemperatureDirty) {
+                    putNightTemperature();
+                }
+
+                if (thermostatData.isWeekProgramStateDirty) {
+                    putWeekProgramState();
+                }
+
+                if (thermostatData.isWeekDaySwitchMapDirty) {
+                    putWeekDaySwitchMap();
+                }
 
                 return null;
             }
