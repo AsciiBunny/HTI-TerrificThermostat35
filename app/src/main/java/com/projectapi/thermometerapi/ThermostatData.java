@@ -44,7 +44,7 @@ public class ThermostatData {
     }
 
     public void setTime(String newTime) {
-        if (time.equals(newTime)) {
+        if (!time.equals(newTime)) {
             isTimeDirty = true;
             time = newTime;
         }
