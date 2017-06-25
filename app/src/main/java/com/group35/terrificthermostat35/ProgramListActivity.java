@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 public class ProgramListActivity extends BasicActivity{
     ListView myList;
-    ArrayList<WeekProgram> ProgramList;
+    ArrayList<ListItem> ProgramList;
     MyAdapter myAdapter;
 
 
@@ -63,17 +63,12 @@ public class ProgramListActivity extends BasicActivity{
         myList=(ListView) findViewById(R.id.listView);
         myList.setAdapter(myAdapter);
 
-        ProgramList.add(new WeekProgram("Weekprogram"));
 
-        myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView parent, View view, int position,long id) {
+        /* zoiets??? hij zou alle huidige listitems ergens vandaan moeten halen en dan toevoegen
+        aand de ProgramList, maar ik heb geen idee hoe ik dat precies zou moeten doen.
+        ProgramList.add(getList())
+         */
 
-                        Intent intent = new Intent(ProgramListActivity.this, WeekProgramActivity.class);
-                        intent.putExtra(WeekProgramActivity.WEEKPROGRAM_NAME_MESSAGE, WeekProgram.DEFAULT_NAME);
-                        startActivity(intent);
-                    }
-                });
 
 
         FloatingActionButton b = (FloatingActionButton) findViewById(R.id.floatingActionButton);
@@ -81,8 +76,12 @@ public class ProgramListActivity extends BasicActivity{
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                ProgramList.add(new WeekProgram("Weekprogram"));
+                ListItem i = new ListItem();
+                ProgramList.add(i);
                 myAdapter.notifyDataSetChanged();
+                /*zou het toegevoegde weekprogram moeten opslaan zodat hij geladen wordt wanneer
+                de activity opnieuw geladen wordt, via de methode hierboven (het ProgramList.add gebeuren)*/
+                i.saveWeekProgram();
 
                 Intent intent = new Intent(ProgramListActivity.this, WeekProgramActivity.class);
                 intent.putExtra(WeekProgramActivity.WEEKPROGRAM_NAME_MESSAGE, WeekProgram.DEFAULT_NAME);

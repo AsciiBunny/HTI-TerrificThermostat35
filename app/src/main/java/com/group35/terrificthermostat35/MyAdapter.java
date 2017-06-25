@@ -25,9 +25,9 @@ import static com.group35.terrificthermostat35.R.color.colorPrimaryDark;
 
 public class MyAdapter extends ArrayAdapter<WeekProgram> {
 
-    ArrayList<WeekProgram> ProgramList = new ArrayList<>();
+    ArrayList<ListItem> ProgramList = new ArrayList<>();
 
-    public MyAdapter(Context context, int textViewResourceId, ArrayList<WeekProgram> objects) {
+    public MyAdapter(Context context, int textViewResourceId, ArrayList<ListItem> objects) {
         super(context, textViewResourceId, objects);
         ProgramList = objects;
     }
@@ -57,15 +57,16 @@ public class MyAdapter extends ArrayAdapter<WeekProgram> {
                 View parent =(View) v.getParent();
                 parent.setBackgroundColor(ContextCompat.getColor(getContext(),R.color.colorPrimaryLight));
 
-                // Something that sets weekprogram to active
+                // Something that sets weekprogram to active???
+
             }
         });
 
         edit.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                //do something
                 Intent intent = new Intent(v.getContext(), WeekProgramActivity.class);
+                // hij moet nog iets van data doorsturen, weet niet of de volgende regel dat helemaal doet?
                 intent.putExtra(WeekProgramActivity.WEEKPROGRAM_NAME_MESSAGE, WeekProgram.DEFAULT_NAME);
                 v.getContext().startActivity(intent);
             }
