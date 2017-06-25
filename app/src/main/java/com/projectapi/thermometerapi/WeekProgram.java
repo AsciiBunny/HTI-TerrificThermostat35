@@ -43,9 +43,11 @@ public class WeekProgram implements Serializable {
             copy.weekDaySwitchMap.put(day, newSwitches);
         }
 
-
         return copy;
     }
 
-
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
 }

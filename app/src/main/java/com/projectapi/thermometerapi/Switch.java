@@ -1,10 +1,12 @@
 package com.projectapi.thermometerapi;
 
+import java.io.Serializable;
+
 /**
  * Created by AsciiBunny on 21-6-2017.
  */
 
-public class Switch {
+public class Switch implements Serializable{
     public SwitchType type;
     public boolean state;
     public String time;

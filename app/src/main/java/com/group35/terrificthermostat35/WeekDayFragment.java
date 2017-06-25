@@ -38,6 +38,8 @@ public class WeekDayFragment extends Fragment {
     private static final String ARG_SECTION_DAY = "section_day";
     private WeekProgram weekProgram;
 
+    private ArrayList<Switch> switches;
+
     public WeekDayFragment() {
     }
 
@@ -65,7 +67,7 @@ public class WeekDayFragment extends Fragment {
         final TextView textView = (TextView) rootView.findViewById(R.id.textView4);
 
         WeekDay day = WeekDay.parseWeekDay(getArguments().getString(ARG_SECTION_DAY));
-        final ArrayList<Switch> switches = new ArrayList<>();
+        switches = new ArrayList<>();
         for (Switch s : weekProgram.weekDaySwitchMap.get(day)) {
             switches.add(s);
             if (!s.getState()) {
@@ -158,6 +160,27 @@ public class WeekDayFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean visible) {
+        super.setUserVisibleHint(visible);
+        if (switches != null && !visible)
+            Save();
+    }
+
+    public void onDetach() {
+        super.onDetach();
+        Save();
+    }
+
+    public void Save() {
+        WeekDay day = WeekDay.parseWeekDay(getArguments().getString(ARG_SECTION_DAY));
+
+        TerrificApplication app = (TerrificApplication) getActivity().getApplication();
+        weekProgram.weekDaySwitchMap.put(day, switches.toArray(new Switch[10]));
+        Log.i("Saving", weekProgram == null ? "null" : "not null");
+        app.getThermostatData().setWeekProgram(weekProgram);
     }
 
     private void sortSwitches(ArrayList<Switch> switches, MultiSlider multiSlider) {

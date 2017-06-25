@@ -13,6 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.projectapi.thermometerapi.ThermostatData;
+import com.projectapi.thermometerapi.WeekDay;
+import com.projectapi.thermometerapi.WeekProgram;
 
 public class WeekProgramActivity extends BasicActivity {
 
@@ -101,36 +103,42 @@ public class WeekProgramActivity extends BasicActivity {
             super(fm);
         }
 
+        WeekProgram weekProgram = app.getThermostatData().getCopyOfWeekProgram();
+
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-
-            return WeekDayFragment.newInstance(position + 1, getPageTitle(position).toString(), app.getThermostatData().getCopyOfWeekProgram());
+            if (position == 0) {
+                return WeekProgramMainFragment.newInstance(getIntent().getStringExtra(WEEKPROGRAM_NAME_MESSAGE), weekProgram);
+            }
+            return WeekDayFragment.newInstance(position, getPageTitle(position).toString(), weekProgram);
         }
 
         @Override
         public int getCount() {
-            // Show 7 total pages.
-            return 7;
+            // Show 8 total pages.
+            return 8;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Monday";
+                    return "Main";
                 case 1:
-                    return "Tuesday";
+                    return "Monday";
                 case 2:
-                    return "Wednesday";
+                    return "Tuesday";
                 case 3:
-                    return "Thursday";
+                    return "Wednesday";
                 case 4:
-                    return "Friday";
+                    return "Thursday";
                 case 5:
-                    return "Saturday";
+                    return "Friday";
                 case 6:
+                    return "Saturday";
+                case 7:
                     return "Sunday";
             }
             return null;

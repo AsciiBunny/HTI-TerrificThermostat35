@@ -1,7 +1,6 @@
 package com.projectapi.thermometerapi;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -10,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -20,6 +20,11 @@ import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 /**
  * Created by s161047 on 19-6-2017.
@@ -29,7 +34,7 @@ public class ThermostatClient {
     protected static final String BASE_URL = "http://wwwis.win.tue.nl/2id40-ws/";
     protected static String GROUP_NUMBER;
     protected static final double EPSILON = 0.01;
-    protected static final int NR_SWITCHES_WEEK = 10;
+    public static final int NR_SWITCHES_WEEK = 10;
     protected static final DecimalFormat TEMP_FORMAT = new DecimalFormat("##.0");
 
     private static ThermostatData thermostatData = new ThermostatData();
@@ -261,10 +266,6 @@ public class ThermostatClient {
                         InputStream err = httpCon.getErrorStream();
                         BufferedReader err_read = new BufferedReader(
                                 new InputStreamReader(err));
-                        String errInput;
-                        while ((errInput = err_read.readLine()) != null) {
-                            Log.e("Testing", "ErrorStream: " + errInput);
-                        }
                         err.close(); // Close the Error Stream.
                         err_read.close();
                     }
@@ -322,11 +323,12 @@ public class ThermostatClient {
         Document doc = builder.newDocument();
 
         Element rootElement = doc.createElement("week_program");
+        rootElement.setAttribute("state", thermostatData.weekProgramState ? "on" : "off");
         doc.appendChild(rootElement);
 
         for (WeekDay weekDay : WeekDay.values()) {
             Element weekdayElement = doc.createElement("day");
-            weekdayElement.setAttribute("day", weekDay.name);
+            weekdayElement.setAttribute("name", weekDay.name);
 
             for (Switch littleSwitch : thermostatData.weekProgram.weekDaySwitchMap.get(weekDay)) {
                 Element littleSwitchElement = doc.createElement("switch");
@@ -341,9 +343,26 @@ public class ThermostatClient {
             rootElement.appendChild(weekdayElement);
         }
 
-        String XMLContent = doc.getTextContent();
+        String XMLContent = toString(doc);
         putURL(getURL("weekProgram"), XMLContent);
 
+    }
+
+    public static String toString(Document doc) {
+        try {
+            StringWriter sw = new StringWriter();
+            TransformerFactory tf = TransformerFactory.newInstance();
+            Transformer transformer = tf.newTransformer();
+            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+
+            transformer.transform(new DOMSource(doc), new StreamResult(sw));
+            return sw.toString();
+        } catch (Exception ex) {
+            throw new RuntimeException("Error converting to String", ex);
+        }
     }
 
     private static String createXMLWithOneTag(String tagName, String value) {
