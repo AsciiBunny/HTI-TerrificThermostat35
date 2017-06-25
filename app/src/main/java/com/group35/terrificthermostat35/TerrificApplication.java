@@ -59,12 +59,14 @@ public class TerrificApplication extends Application {
 
         @Override
         public void onFinish(final ThermostatData thermostatData) {
-            currentActivity.runOnUiThread(new Runnable(){
-                @Override
-                public void run() {
-                    currentActivity.onThermostatDataUpdate(thermostatData);
-                }
-            });
+            if (currentActivity != null) {
+                currentActivity.runOnUiThread(new Runnable(){
+                    @Override
+                    public void run() {
+                        currentActivity.onThermostatDataUpdate(thermostatData);
+                    }
+                });
+            }
         }
     }
 }

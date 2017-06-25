@@ -1,8 +1,5 @@
 package com.projectapi.thermometerapi;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by AsciiBunny on 21-6-2017.
  */
@@ -18,17 +15,10 @@ public class ThermostatData {
     protected boolean isCurrentTemperatureDirty, isTargetTemperatureDirty;
     protected boolean isDayTemperatureDirty, isNightTemperatureDirty;
     protected boolean isWeekProgramStateDirty;
-    protected Map<WeekDay, Boolean> weekDayDirtySwitchMap = new HashMap<>();
     protected boolean isTimeDirty;
+    protected boolean isWeekDaySwitchMapDirty;
 
     public ThermostatData() {
-        weekDayDirtySwitchMap.put(WeekDay.MONDAY, false);
-        weekDayDirtySwitchMap.put(WeekDay.TUESDAY, false);
-        weekDayDirtySwitchMap.put(WeekDay.WEDNESDAY, false);
-        weekDayDirtySwitchMap.put(WeekDay.THURSDAY, false);
-        weekDayDirtySwitchMap.put(WeekDay.FRIDAY, false);
-        weekDayDirtySwitchMap.put(WeekDay.SATURDAY, false);
-        weekDayDirtySwitchMap.put(WeekDay.SUNDAY, false);
         weekProgram = new WeekProgram();
     }
 
@@ -44,7 +34,7 @@ public class ThermostatData {
     }
 
     public void setTime(String newTime) {
-        if (!time.equals(newTime)) {
+        if (time.equals(newTime)) {
             isTimeDirty = true;
             time = newTime;
         }
@@ -124,7 +114,7 @@ public class ThermostatData {
         Switch oldSwitch = switchesForDay[switchIndex];
 
         if (!oldSwitch.equals(newSwitch)) {
-            weekDayDirtySwitchMap.put(weekDay, true);
+            isWeekDaySwitchMapDirty = true;
             switchesForDay[switchIndex] = newSwitch;
         }
     }
@@ -137,9 +127,7 @@ public class ThermostatData {
         this.weekProgram = weekProgram;
         isDayTemperatureDirty = true;
         isNightTemperatureDirty = true;
-        for(WeekDay day : weekDayDirtySwitchMap.keySet()) {
-            weekDayDirtySwitchMap.put(day, true);
-        }
+        isWeekDaySwitchMapDirty = true;
     }
 
 }

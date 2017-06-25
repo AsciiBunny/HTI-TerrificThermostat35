@@ -1,13 +1,5 @@
 package com.projectapi.thermometerapi;
 
-import android.util.Log;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +24,7 @@ public class WeekProgram implements Serializable {
     public double dayTemperature, nightTemperature;
     public Map<WeekDay, Switch[]> weekDaySwitchMap = new HashMap<>();
 
-public String getName(){return name;}
+    public String getName(){return name;}
 
     public WeekProgram getCopy() {
         WeekProgram copy = new WeekProgram(name);

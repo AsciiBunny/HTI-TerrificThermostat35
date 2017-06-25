@@ -8,4 +8,6 @@
     <color name="colorSecondaryLight">#ff7539</color>
     <color name="colorAccent">#FF4081</color>
     <color name="textColor">#FFFFFF</color>
+    <color name="colorNight">#002e9b</color>
+    <color name="colorDay">#c1e8ff</color>
 </resources>
