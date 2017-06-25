@@ -70,6 +70,12 @@ public class ProgramListActivity extends BasicActivity{
         myList = (ListView) findViewById(R.id.listView);
         myList.setAdapter(myAdapter);
 
+        WeekProgram test =data.getCopyOfWeekProgram();
+        test.setName("Week Program");
+        data.setWeekProgram(test);
+
+        ProgramList.add(data.getCopyOfWeekProgram());
+
      /*try {
          FileInputStream fis = this.openFileInput("/thermostaat");
         ObjectInputStream is = new ObjectInputStream(fis);
@@ -83,7 +89,6 @@ public class ProgramListActivity extends BasicActivity{
     }*/
 
 
-        ProgramList.add(new WeekProgram("Week Program"));
 
         FloatingActionButton b = (FloatingActionButton) findViewById(R.id.floatingActionButton);
 

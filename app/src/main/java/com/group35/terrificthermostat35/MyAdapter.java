@@ -80,6 +80,5 @@ public class MyAdapter extends ArrayAdapter<WeekProgram> {
     }
 
 
-}
 
 

@@ -24,6 +24,8 @@ public class WeekProgram implements Serializable {
     public double dayTemperature, nightTemperature;
     public Map<WeekDay, Switch[]> weekDaySwitchMap = new HashMap<>();
 
+    public void setName(String Name) { name = Name;}
+
     public String getName(){return name;}
 
     public WeekProgram getCopy() {
