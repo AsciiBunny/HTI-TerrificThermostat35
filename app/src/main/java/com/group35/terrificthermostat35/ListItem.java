@@ -5,12 +5,14 @@ package com.group35.terrificthermostat35;
  */
 
 public class ListItem {
+    String name = "name";
+
 
     public void getList(){}
     public void getNewWeekProgram(){}
     public void getWeekProgram(String name){}
     public void saveWeekProgram(){}
-    public void getName(){
+    public String getName(){ return name;
 
     }
 

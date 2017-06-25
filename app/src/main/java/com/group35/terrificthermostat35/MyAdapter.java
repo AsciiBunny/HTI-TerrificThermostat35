@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.group35.terrificthermostat35.ListItem;
 import com.group35.terrificthermostat35.R;
+import com.projectapi.thermometerapi.ThermostatData;
 import com.projectapi.thermometerapi.WeekProgram;
 
 import java.util.ArrayList;
@@ -25,9 +26,9 @@ import static com.group35.terrificthermostat35.R.color.colorPrimaryDark;
 
 public class MyAdapter extends ArrayAdapter<WeekProgram> {
 
-    ArrayList<ListItem> ProgramList = new ArrayList<>();
+    ArrayList<WeekProgram> ProgramList = new ArrayList<>();
 
-    public MyAdapter(Context context, int textViewResourceId, ArrayList<ListItem> objects) {
+    public MyAdapter(Context context, int textViewResourceId, ArrayList<WeekProgram> objects) {
         super(context, textViewResourceId, objects);
         ProgramList = objects;
     }
@@ -52,7 +53,6 @@ public class MyAdapter extends ArrayAdapter<WeekProgram> {
         active.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                //do something
                 Log.d("CLICKED POSITION",Integer.valueOf(pos).toString());
                 View parent =(View) v.getParent();
                 parent.setBackgroundColor(ContextCompat.getColor(getContext(),R.color.colorPrimaryLight));
@@ -74,6 +74,8 @@ public class MyAdapter extends ArrayAdapter<WeekProgram> {
 
 
         return v;
+    }
+
     }
 
 

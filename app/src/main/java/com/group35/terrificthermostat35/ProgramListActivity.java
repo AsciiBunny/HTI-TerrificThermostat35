@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 public class ProgramListActivity extends BasicActivity{
     ListView myList;
-    ArrayList<ListItem> ProgramList;
+    ArrayList<WeekProgram> ProgramList;
     MyAdapter myAdapter;
 
 
@@ -64,24 +64,13 @@ public class ProgramListActivity extends BasicActivity{
         myList.setAdapter(myAdapter);
 
 
-        /* zoiets??? hij zou alle huidige listitems ergens vandaan moeten halen en dan toevoegen
-        aand de ProgramList, maar ik heb geen idee hoe ik dat precies zou moeten doen.
-        ProgramList.add(getList())
-         */
-
-
-
         FloatingActionButton b = (FloatingActionButton) findViewById(R.id.floatingActionButton);
 
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                ListItem i = new ListItem();
-                ProgramList.add(i);
+                ProgramList.add(new WeekProgram("Something"));
                 myAdapter.notifyDataSetChanged();
-                /*zou het toegevoegde weekprogram moeten opslaan zodat hij geladen wordt wanneer
-                de activity opnieuw geladen wordt, via de methode hierboven (het ProgramList.add gebeuren)*/
-                i.saveWeekProgram();
 
                 Intent intent = new Intent(ProgramListActivity.this, WeekProgramActivity.class);
                 intent.putExtra(WeekProgramActivity.WEEKPROGRAM_NAME_MESSAGE, WeekProgram.DEFAULT_NAME);
