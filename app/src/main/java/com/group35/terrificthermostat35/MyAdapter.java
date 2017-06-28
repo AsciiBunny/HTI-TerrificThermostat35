@@ -5,6 +5,7 @@ package com.group35.terrificthermostat35;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +44,7 @@ public class MyAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(final int groupPosition, final int childPosition,
-                             boolean isLastChild, View convertView, ViewGroup parent) {
+                             boolean isLastChild, View convertView, final ViewGroup parent) {
 
 
         if (convertView == null) {
@@ -59,6 +60,8 @@ public class MyAdapter extends BaseExpandableListAdapter {
                 WeekProgram weekProgram = app.getFileManager().get(names.get(groupPosition));
                 if (weekProgram != null) {
                     app.getThermostatData().setWeekProgram(weekProgram);
+
+                    Snackbar.make(parent, "WeekProgram " + names.get(groupPosition) + " set as active.", Snackbar.LENGTH_SHORT).show();
                 }
             }
         });
@@ -68,7 +71,6 @@ public class MyAdapter extends BaseExpandableListAdapter {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), WeekProgramActivity.class);
-                // hij moet nog iets van data doorsturen, weet niet of de volgende regel dat helemaal doet?
                 intent.putExtra(WeekProgramActivity.WEEKPROGRAM_NAME_MESSAGE, names.get(groupPosition));
                 v.getContext().startActivity(intent);
             }
@@ -79,6 +81,7 @@ public class MyAdapter extends BaseExpandableListAdapter {
             @Override
             public void onClick(View v) {
                 app.getFileManager().delete(names.get(groupPosition));
+                Snackbar.make(parent, "WeekProgram " + names.get(groupPosition) + " deleted.", Snackbar.LENGTH_SHORT).show();
                 names.remove(groupPosition); //or some other task
                 notifyDataSetChanged();
             }

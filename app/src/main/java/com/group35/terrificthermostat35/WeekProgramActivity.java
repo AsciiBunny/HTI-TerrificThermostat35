@@ -54,9 +54,10 @@ public class WeekProgramActivity extends BasicActivity {
         String name = intent.getStringExtra(WEEKPROGRAM_NAME_MESSAGE);
         getSupportActionBar().setTitle(name);
         weekProgram = app.getFileManager().get(name);
-        if (weekProgram == null)
+        if (weekProgram == null) {
             weekProgram = app.getThermostatData().getCopyOfWeekProgram();
-        else {
+            weekProgram.name = WeekProgram.DEFAULT_NAME;
+        } else {
             lastName = weekProgram.getName();
         }
 
@@ -94,7 +95,7 @@ public class WeekProgramActivity extends BasicActivity {
             app.getFileManager().save(weekProgram);
             Log.i("Saving", "Saving " + weekProgram.name);
 
-            if (lastName != null)
+            if (lastName != null && !lastName.equals(weekProgram.getName()))
                 app.getFileManager().delete(lastName);
 
             startActivity(new Intent(WeekProgramActivity.this, ProgramListActivity.class));

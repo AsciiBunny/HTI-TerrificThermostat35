@@ -92,12 +92,11 @@ public class WeekDayFragment extends Fragment {
         myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+                final Switch changedSwitch = switches.get(position);
+                TimePickerDialog dialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker picker, int hourOfDay, int minute) {
                         int time = hourOfDay * 60 + minute;
-
-                        Switch changedSwitch = switches.get(position);
                         changedSwitch.time = timeToString(time);
 
                         sortSwitches(switches);
@@ -110,7 +109,9 @@ public class WeekDayFragment extends Fragment {
 
                         switchAdapter.notifyDataSetChanged();
                     }
-                }, 12, 0, true).show();
+                }, 12, 0, true);
+                dialog.updateTime(hoursFromString(changedSwitch.getTime()), minutesFromString(changedSwitch.getTime()));
+                dialog.show();
             }
         });
 
