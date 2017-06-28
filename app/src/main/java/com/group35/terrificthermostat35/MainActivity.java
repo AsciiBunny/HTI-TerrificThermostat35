@@ -33,7 +33,7 @@ public class MainActivity extends BasicActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.nav_main:
-                    startActivity(new Intent(MainActivity.this, MainActivity.class));
+                    //startActivity(new Intent(MainActivity.this, MainActivity.class));
                     return true;
                 case R.id.nav_weekprog:
                     startActivity(new Intent(MainActivity.this, ProgramListActivity.class));

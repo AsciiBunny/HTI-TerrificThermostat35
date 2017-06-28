@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -17,8 +18,6 @@ import com.projectapi.thermometerapi.WeekDay;
 import com.projectapi.thermometerapi.WeekProgram;
 
 public class WeekProgramActivity extends BasicActivity {
-
-
 
     public static final String WEEKPROGRAM_NAME_MESSAGE = "com.group35.terrificthermostat35.weekProgramNameMessage";
     /**
@@ -36,10 +35,15 @@ public class WeekProgramActivity extends BasicActivity {
      */
     private ViewPager mViewPager;
 
+
+    private WeekProgram weekProgram;
+    private String lastName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_week_program);
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -49,6 +53,12 @@ public class WeekProgramActivity extends BasicActivity {
         Intent intent = getIntent();
         String name = intent.getStringExtra(WEEKPROGRAM_NAME_MESSAGE);
         getSupportActionBar().setTitle(name);
+        weekProgram = app.getFileManager().get(name);
+        if (weekProgram == null)
+            weekProgram = app.getThermostatData().getCopyOfWeekProgram();
+        else {
+            lastName = weekProgram.getName();
+        }
 
         // Create the adapter that will return a fragment for each of the seven
         // primary sections of the activity.
@@ -61,11 +71,6 @@ public class WeekProgramActivity extends BasicActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-    }
-
-    @Override
-    public void onThermostatDataUpdate(ThermostatData thermostatData) {
-
     }
 
 
@@ -85,12 +90,22 @@ public class WeekProgramActivity extends BasicActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_done) {
-            Snackbar.make(findViewById(R.id.main_content), "Test", 2000).show();
+
+            app.getFileManager().save(weekProgram);
+            Log.i("Saving", "Saving " + weekProgram.name);
+
+            if (lastName != null)
+                app.getFileManager().delete(lastName);
+
             startActivity(new Intent(WeekProgramActivity.this, ProgramListActivity.class));
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void setActionBarTitle(String actionBarTitle) {
+        getSupportActionBar().setTitle(actionBarTitle);
     }
 
     /**
@@ -102,8 +117,6 @@ public class WeekProgramActivity extends BasicActivity {
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
-
-        WeekProgram weekProgram = app.getThermostatData().getCopyOfWeekProgram();
 
         @Override
         public Fragment getItem(int position) {
@@ -143,5 +156,10 @@ public class WeekProgramActivity extends BasicActivity {
             }
             return null;
         }
+    }
+
+    @Override
+    public void onThermostatDataUpdate(ThermostatData thermostatData) {
+
     }
 }

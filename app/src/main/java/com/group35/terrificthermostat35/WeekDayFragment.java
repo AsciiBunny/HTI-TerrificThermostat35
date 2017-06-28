@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.projectapi.thermometerapi.Switch;
+import com.projectapi.thermometerapi.SwitchType;
 import com.projectapi.thermometerapi.WeekDay;
 import com.projectapi.thermometerapi.WeekProgram;
 
@@ -65,6 +66,7 @@ public class WeekDayFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_week_program, container, false);
 
         final TextView textView = (TextView) rootView.findViewById(R.id.textView4);
+        final MultiSlider multiSlider = (MultiSlider) rootView.findViewById(R.id.range_slider5);
 
         WeekDay day = WeekDay.parseWeekDay(getArguments().getString(ARG_SECTION_DAY));
         switches = new ArrayList<>();
@@ -76,13 +78,17 @@ public class WeekDayFragment extends Fragment {
         }
 
 
-        final SwitchAdapter switchAdapter = new SwitchAdapter(getActivity(), R.layout.switch_list_item, switches);
+        final SwitchAdapter switchAdapter = new SwitchAdapter(getActivity(), R.layout.switch_list_item, switches, new Runnable() {
+            @Override
+            public void run() {
+                sortSwitches(switches);
+                rebindThumbs(switches, multiSlider);
+            }
+        });
         ListView myList = (ListView) rootView.findViewById(R.id.listView);
         myList.setAdapter(switchAdapter);
-        final MultiSlider multiSlider = (MultiSlider) rootView.findViewById(R.id.range_slider5);
-        multiSlider.clearThumbs();
 
-        /*
+
         myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -94,15 +100,19 @@ public class WeekDayFragment extends Fragment {
                         Switch changedSwitch = switches.get(position);
                         changedSwitch.time = timeToString(time);
 
-                        sortSwitches(switches, multiSlider);
+                        sortSwitches(switches);
+                        multiSlider.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                rebindThumbs(switches, multiSlider);
+                            }
+                        });
 
                         switchAdapter.notifyDataSetChanged();
                     }
                 }, 12, 0, true).show();
             }
         });
-        */
-
 
 
         multiSlider.setOnThumbValueChangeListener(new MultiSlider.OnThumbValueChangeListener() {
@@ -115,34 +125,34 @@ public class WeekDayFragment extends Fragment {
             }
         });
 
-        multiSlider.clearThumbs();
+        /*
         boolean isDay = false;
         for (Switch s : switches) {
             MultiSlider.Thumb thumb = multiSlider.addThumb(stringToRangeTime(s.getTime()));
             thumb.setRange(new ColorDrawable(getResources().getColor(isDay ? R.color.colorDay : R.color.colorNight)));
             isDay = !isDay;
         }
+        */
+        sortSwitches(switches);
+        rebindThumbs(switches, multiSlider);
 
 
         // creates popup to ask for time of switch
         final TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                //INSERT TIME
-                int time = hourOfDay * 60 + minute;
-                boolean active = true;
+                Switch inactive = getInactiveSwitch(switches);
 
-                for (int i = 0; i < 10; i++) {
-                    Switch s = switches.get(i);
-                    MultiSlider.Thumb thumb = multiSlider.getThumb(i);
-                    int sTime = thumb.getValue();
-                    if (sTime > time) {
-                        s.time = timeToString(time);
-                        s.state = true;
-                        thumb.setValue(time);
-                        time = sTime;
+                inactive.state = true;
+                inactive.time = timeToString(hourOfDay, minute);
+
+                sortSwitches(switches);
+                multiSlider.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        rebindThumbs(switches, multiSlider);
                     }
-                }
+                });
 
                 switchAdapter.notifyDataSetChanged();
 
@@ -176,52 +186,47 @@ public class WeekDayFragment extends Fragment {
 
     public void Save() {
         WeekDay day = WeekDay.parseWeekDay(getArguments().getString(ARG_SECTION_DAY));
-
-        TerrificApplication app = (TerrificApplication) getActivity().getApplication();
+        Log.i("Saving", "Writing " + day.name() + " to program " + weekProgram.name);
         weekProgram.weekDaySwitchMap.put(day, switches.toArray(new Switch[10]));
-        Log.i("Saving", weekProgram == null ? "null" : "not null");
-        app.getThermostatData().setWeekProgram(weekProgram);
     }
 
-    private void sortSwitches(ArrayList<Switch> switches, MultiSlider multiSlider) {
-        Switch switchA = switches.get(0);
-        int timeA = stringToRangeTime(switchA.getTime());
-
-        for (int i = 1; i < 10; i++) {
-            Switch switchB = switches.get(i);
-            int timeB = stringToRangeTime(switchB.getTime());
-
-            Log.i("timeA", timeA + "");
-            Log.i("timeB", timeB + "");
-
-            if (timeA > timeB) {
-                switchA.time = timeToString(timeB);
-                switchB.time = timeToString(timeA);
-                timeB = timeA;
-            } else if(timeA == 60 * 24) {
-                switchA.state = false;
-                return;
+    private void sortSwitches(ArrayList<Switch> switches) {
+        Collections.sort(switches, new Comparator<Switch>() {
+            @Override
+            public int compare(Switch s1, Switch s2) {
+                Integer time1 = stringToRangeTime(s1.getTime());
+                Integer time2 = stringToRangeTime(s2.getTime());
+                return time1.compareTo(time2);
             }
-            switchA = switchB;
-            timeA = timeB;
+        });
+        boolean isDay = true;
+        for (Switch s : switches) {
+            s.type = isDay ? SwitchType.DAY : SwitchType.NIGHT;
+            isDay = !isDay;
         }
-        rebindThumbs(switches, multiSlider);
     }
 
     private void rebindThumbs(final ArrayList<Switch> switches, final MultiSlider multiSlider) {
+        multiSlider.clearThumbs();
+        for (Switch s : switches) {
+            MultiSlider.Thumb thumb = multiSlider.addThumb(stringToRangeTime(s.getTime()));
+        }
 
-        multiSlider.post(new Runnable() {
-            @Override
-            public void run() {
-                multiSlider.clearThumbs();
-                boolean isDay = false;
-                for (Switch s : switches) {
-                    MultiSlider.Thumb thumb = multiSlider.addThumb(stringToRangeTime(s.getTime()));
-                    thumb.setRange(new ColorDrawable(getResources().getColor(isDay ? R.color.colorDay : R.color.colorNight)));
-                    isDay = !isDay;
-                }
-            }
-        });
+        boolean isDay = false;
+        for (int i = 0; i < switches.size(); i++) {
+            multiSlider.getThumb(i).setRange(new ColorDrawable(getResources().getColor(isDay ? R.color.colorDay : R.color.colorNight)));
+            isDay = !isDay;
+            multiSlider.getThumb(i).setValue(multiSlider.getThumb(i).getValue());
+        }
+        multiSlider.invalidate();
+    }
+
+    private Switch getInactiveSwitch(ArrayList<Switch> switches) {
+        for (Switch s : switches) {
+            if (!s.state)
+                return s;
+        }
+        return null;
     }
 
     private String timeToString(int rangeTime) {

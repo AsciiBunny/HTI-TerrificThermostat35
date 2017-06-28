@@ -24,30 +24,43 @@ public class SwitchAdapter extends ArrayAdapter<Switch> {
 
     private ArrayList<Switch> switches = new ArrayList<>();
 
-    public SwitchAdapter(Context context, int textViewResourceId, ArrayList<Switch> switches) {
-         super(context, textViewResourceId, switches);
-         this.switches = switches;
+    private Runnable afterDelete;
+
+    public SwitchAdapter(Context context, int textViewResourceId, ArrayList<Switch> switches, Runnable afterDelete) {
+        super(context, textViewResourceId, switches);
+        this.switches = switches;
+        this.afterDelete = afterDelete;
     }
 
     @Override
     public int getCount() {
         int count = 0;
-        for(Switch s : switches) {
-            if(s.getState())
+        for (Switch s : switches) {
+            if (s.getState())
                 count++;
         }
         return count;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         View v = convertView;
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         v = inflater.inflate(R.layout.switch_list_item, null);
         TextView textView = (TextView) v.findViewById(R.id.textView);
         ImageView imageView = (ImageView) v.findViewById(R.id.imageView);
-        imageView.setImageResource(switches.get(position).getSwitchType() == SwitchType.DAY ?  R.drawable.ic_sun : R.drawable.ic_moon);
+        imageView.setImageResource(switches.get(position).getSwitchType() == SwitchType.DAY ? R.drawable.ic_sun : R.drawable.ic_moon);
+
+
+        ImageView imageView2 = (ImageView) v.findViewById(R.id.imageView2);
+        imageView2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switches.get(position).time = "24:00";
+                afterDelete.run();
+            }
+        });
         textView.setText(switches.get(position).getTime());
         return v;
     }

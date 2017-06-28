@@ -38,7 +38,7 @@ public class SettingsActivity extends BasicActivity {
                     startActivity(new Intent(SettingsActivity.this, ProgramListActivity.class));
                     return true;
                 case R.id.nav_settings:
-                    startActivity(new Intent(SettingsActivity.this, SettingsActivity.class));
+                    //startActivity(new Intent(SettingsActivity.this, SettingsActivity.class));
                     return true;
             }
             return false;

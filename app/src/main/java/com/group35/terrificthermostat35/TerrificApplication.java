@@ -15,6 +15,8 @@ import com.projectapi.thermometerapi.ThermostatDataHandler;
 public class TerrificApplication extends Application {
 
     private static final int THERMOSTAT_CLIENT_UPDATE_TIME = 1000;
+    private static final String THERMOSTAT_SERVER_WEEKPROGRAM_NAME = "SERVER WEEKPROGRAM";
+    private FileManager fileManager;
     private BasicActivity currentActivity;
     private ThermostatData thermostatData;
 
@@ -31,6 +33,7 @@ public class TerrificApplication extends Application {
                 timerHandler.postDelayed(new ThermostatClientPusher(), THERMOSTAT_CLIENT_UPDATE_TIME);
             }
         });
+        fileManager = new FileManager(this);
     }
 
     public void setCurrentActivity(BasicActivity activity) {
@@ -43,6 +46,10 @@ public class TerrificApplication extends Application {
 
     public ThermostatData getThermostatData() {
         return thermostatData;
+    }
+
+    public FileManager getFileManager() {
+        return  fileManager;
     }
 
 
@@ -63,7 +70,8 @@ public class TerrificApplication extends Application {
                 currentActivity.runOnUiThread(new Runnable(){
                     @Override
                     public void run() {
-                        currentActivity.onThermostatDataUpdate(thermostatData);
+                        if (currentActivity != null)
+                            currentActivity.onThermostatDataUpdate(thermostatData);
                     }
                 });
             }
