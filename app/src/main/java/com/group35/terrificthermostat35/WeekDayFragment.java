@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -63,7 +64,7 @@ public class WeekDayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_week_program, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_week_program, container, false);
 
         final TextView textView = (TextView) rootView.findViewById(R.id.textView4);
         final MultiSlider multiSlider = (MultiSlider) rootView.findViewById(R.id.range_slider5);
@@ -144,18 +145,20 @@ public class WeekDayFragment extends Fragment {
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 Switch inactive = getInactiveSwitch(switches);
 
-                inactive.state = true;
-                inactive.time = timeToString(hourOfDay, minute);
+                if (inactive != null) {
+                    inactive.state = true;
+                    inactive.time = timeToString(hourOfDay, minute);
 
-                sortSwitches(switches);
-                multiSlider.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        rebindThumbs(switches, multiSlider);
-                    }
-                });
+                    sortSwitches(switches);
+                    multiSlider.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            rebindThumbs(switches, multiSlider);
+                        }
+                    });
 
-                switchAdapter.notifyDataSetChanged();
+                    switchAdapter.notifyDataSetChanged();
+                }
 
             }
         }, 12, 0, true);
@@ -165,7 +168,11 @@ public class WeekDayFragment extends Fragment {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                timePickerDialog.show();
+                if (getInactiveSwitch(switches) != null) {
+                    timePickerDialog.show();
+                } else {
+                    Snackbar.make(rootView, "You already have the maximum number of switches for this day!", Snackbar.LENGTH_SHORT).show();
+                }
             }
 
         });

@@ -85,7 +85,7 @@ public class ThermostatClient {
                     }
 
                     if (thermostatData.isTimeDirty) {
-                        if (newTime.equals(thermostatData.time)) {
+                        if (!newTime.equals(thermostatData.time)) {
                             thermostatData.isTimeDirty = false;
                             thermostatData.time = newTime;
                         }
